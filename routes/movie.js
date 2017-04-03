@@ -1,5 +1,6 @@
 "use strict"
 var express = require('express')
+var _ = require('lodash')
 var router = express.Router()
 
 var Movie = {}

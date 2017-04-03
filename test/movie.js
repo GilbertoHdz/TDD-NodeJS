@@ -6,7 +6,7 @@ const host = api
 
 request = request(host)
 
-describe('la ruta de peliculas', function(){
+describe('la ruta de peliculas:', function(){
   describe('una peticion a POST', function(){
     it('deberia crear una pelicula', function(done){
       let movie = {
@@ -16,7 +16,7 @@ describe('la ruta de peliculas', function(){
 
       request
         .post('/movie')
-        .set('Acept', 'application/json')
+        .set('Accept', 'application/json')
         .send(movie)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -31,12 +31,12 @@ describe('la ruta de peliculas', function(){
         expect(movie).to.have.property('_id')
         
         done(err)
-      })
+      }, done)
     })
   })
 
   describe('una peticion GET', function(){
-    it('deberia obtener todas las peliculas', function(){
+    it('deberia obtener todas las peliculas', function(done){
       let movie_id
       let movie2_id
 
@@ -52,7 +52,7 @@ describe('la ruta de peliculas', function(){
 
       request
         .post('/movie')
-        .set('Acept', 'application/json')
+        .set('Accept', 'application/json')
         .send(movie)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -60,7 +60,7 @@ describe('la ruta de peliculas', function(){
         movie_id = res.body.movie._id
         return request
           .post('/movie')
-          .set('Acept', 'application/json')
+          .set('Accept', 'application/json')
           .send(movie2)
           .expect(201)
           .expect('Content-Type', /application\/json/)
@@ -69,12 +69,12 @@ describe('la ruta de peliculas', function(){
         movie2_id = res.body.movie._id
         return request
           .get('/movie')
-          .send(movie2)
-          .expect(201)
+          .set('Accept', 'application/json')
+          .expect(200)
           .expect('Content-Type', /application\/json/)
       })
       .then((res) => {
-        let body = req.body
+        let body = res.body
 
         expect(body).to.have.property('movies')
         expect(body.movies).to.be.an('array')
@@ -93,7 +93,7 @@ describe('la ruta de peliculas', function(){
         expect(movie2).to.have.property('year', '1989')
 
         done()
-      })
+      }, done)
     })
   })
 })
