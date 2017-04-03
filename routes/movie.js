@@ -37,4 +37,20 @@ router
   res.status(200).json({movie: movie})
 })
 
+.put('/:id', function(req, res, next){
+  console.log("PUT:id ", req.params.id)
+  if(!req.params.id && !req.body){
+    res.status(403).json({error: true, message: 'Params empty'})
+  }
+
+  let new_movie = req.body
+  new_movie._id = parseInt(req.params.id, 10)
+
+  Movie[new_movie.id] = new_movie
+  new_movie = Movie[req.params.id]
+
+  res.status(200).json({movie: new_movie})
+
+})
+
 module.exports = router

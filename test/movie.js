@@ -115,7 +115,7 @@ describe('peticion GET /:id', function(){
         movie_id = res.body.movie._id
         return request
           .get('/movie/' + movie_id)
-          .set('Acept', 'application/json')
+          .set('Accept', 'application/json')
           .expect(200)
           .expect('Content-Type', /application\/json/)
       })
@@ -129,6 +129,43 @@ describe('peticion GET /:id', function(){
         expect(movie).to.have.property('title', 'her')
         expect(movie).to.have.property('year', '2013')
         done()
+      }, done)
+    })
+  })
+
+  describe('una peticion PUT: /movie', function(){
+    it('deberia modificar una pelicula', function(done){
+      let movie_id
+      let movie = {
+          'title': 'pulp fiction',
+          'year': '1993'
+        }
+
+        request
+          .post('/movie')
+          .set('Accept', 'application/json')
+          .send(movie)
+          .expect(201)
+          .expect('Content-Type', /application\/json/)
+        .then((res) => {
+          movie_id = res.body.movie._id
+          return request
+            .put('/movie/' + movie_id)
+            .set('Accept', 'application/json')
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+        })
+        .then((res) => {
+          let body = res.body
+          
+          expect(body).to.have.property('movie')
+          movie = body.movie
+
+          expect(movie).to.have.property('_id', movie_id)
+          expect(movie).to.have.property('title', 'pulp fiction')
+          expect(movie).to.have.property('year', '1993')
+          
+          done()
       }, done)
     })
   })
