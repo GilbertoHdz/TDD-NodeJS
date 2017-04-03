@@ -1,0 +1,38 @@
+GET: /200
+hola mundo
+
+//PELICULA
+GET: /movie 200
+obtener todas las peliculas
+
+GET: /movie/:id 200
+obtener una pelicula
+
+POST: /movie 201
+crear una pelicula
+
+PUT: /movie/:id 200
+modificar una pelicula
+
+DELETE: /movie/:id 400
+eliminar una pelicula
+
+//USUARIO
+GET: /user 200
+obtener todos los usuarios
+
+GET: /user/:id 200
+obtener un usuario
+
+POST: /user 201
+crear un usuario
+
+PUT: /user/:id 200
+actualizar un usuario
+
+DELETE: /user/:id 400
+eliminar un usuario
+
+//OAUTH
+POST: /auth 201
+token para usuario
