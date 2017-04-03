@@ -1,5 +1,5 @@
 --ui bdd
---reporter spec
+--reporter nyan
 -r test/helpers/setup
 -w
 -G
