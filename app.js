@@ -4,9 +4,15 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose')
+var config = require('./lib/config')
 
 var app = express();
 
+mongoose.createConnection(config.database)
+//mongoose.connect(config.database)
+
+var auth_middleware = require('./lib/middleware/auth')
 var index = require('./routes/index')
 var auth = require('./routes/auth')
 var movie = require('./routes/movie')
@@ -20,10 +26,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Rutas Inseguras
 app.use('/', index)
 app.use('/auth', auth)
-app.use('/movie', movie)
 app.use('/user', user)
+
+//Middleware
+app.use(auth_middleware)
+
+//Rutas Seguras
+app.use('/movie', movie)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

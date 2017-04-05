@@ -19,7 +19,7 @@ describe('Ruta para los usuarios:', function(){
   })
 
   describe('POST /', function(){
-    it.only('deberia crear un usuario', function(done){
+    it('deberia crear un usuario', function(done){
       let user = {
         'username': 'gilberto',
         'password': 'secret'
