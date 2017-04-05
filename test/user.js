@@ -19,7 +19,7 @@ describe('Ruta para los usuarios:', function(){
   })
 
   describe('POST /', function(){
-    it('deberia crear un usuario', function(done){
+    it.only('deberia crear un usuario', function(done){
       let user = {
         'username': 'gilberto',
         'password': 'secret'
@@ -38,7 +38,7 @@ describe('Ruta para los usuarios:', function(){
         let user = body.user
 
         expect(user).to.have.property('_id')
-        expect(user).to.have.property('password')
+        //expect(user).to.have.property('password') //#Solo debe saberse de lado del servidor
         expect(user).to.have.property('username', 'gilberto')
         
         done(err)

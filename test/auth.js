@@ -1,14 +1,25 @@
 "use strict"
 let request = require('supertest-as-promised')
 const _ = require('lodash')
+const mongoose = require('mongoose')
+const config = require('../lib/config')
 const api = require('../app')
 const host = api
 
 request = request(host)
 
 describe('Ruta para los auth:', function(){
+  before(() => {
+    mongoose.connect(config.database)
+  })
+
+  after((done) => {
+    mongoose.disconnect(done)
+    mongoose.models = {}
+  })
+
   describe('POST /', function(){
-    it.only('deberia autenticar un usuario', function(done){
+    it('deberia autenticar un usuario', function(done){
       let user = {
         'username': 'gilberto',
         'password': 'secret'
@@ -21,7 +32,7 @@ describe('Ruta para los auth:', function(){
         .expect(201)
         .expect('Content-Type', /application\/json/)
       .then((res) => {
-        user = res.body.user
+        //user = res.body.user #Si hago esto el usuario se envia con el password encriptado...
         
         return request
           .post('/auth')

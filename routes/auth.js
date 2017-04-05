@@ -1,7 +1,9 @@
 "use strict"
 const express = require('express')
+const jwt = require('jsonwebtoken')
 const router = express.Router()
 const User = require('../lib/model/user')
+const config = require('../lib/config')
 const crypto = require('crypto'),
       algorithm = 'aes-256-ctr',
       password = 'M4NIT05'
@@ -20,7 +22,7 @@ function decrypt(text){
   return dec
 }
 
-/* GET users listing. */
+/* POST auth */
 router.post('/', function(req, res, next) {
   if(!req.body){
     res.status(403).json({error: true, message: 'Body empty'})
@@ -29,27 +31,19 @@ router.post('/', function(req, res, next) {
   let _user = req.body
   
   User.findOne({username: _user.username}, (err, user) => {
-      console.log("POST save: ", _user);
+      console.log("POST AUTH");
       if(err) {
         res.status(403).json({error: true, message: err})
       } else if(user) {
-        if(decrypt(user.password) === _user.password){
-          res.status(201).json({user: {username: user.username, _id: user._id} })
-        }else{
-          res.status(403).json({ error: true, message: 'El usuario existe' })
+        if(user.password === encrypt(_user.password)){
+          let token = jwt.sign(user, config.secret, {
+            expiresIn: '24hr'
+          })
+          console.log("TOKEN", token);
+          res.status(201).json({ token: token })
         }
-        
       } else {
-        new User({
-          username: _user.username,
-          password: encrypt(_user.password)
-        })
-        .save((err, user) => {
-          if(err) {
-            res.status(403).json({error: true, message: err})
-          }
-          res.status(201).json({user: {username: user.username, _id: user._id}})
-        })
+        res.status(403).json({ error: true, message: 'El usuario existe' })
       }
   })
 
